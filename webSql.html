@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>web Sql</title>
+</head>
+<body>
+	<script>
+		var db = openDatabase("studentDb","1.0","学生信息表",2*1024*1024);
+		db.transaction(function(fx){
+			//要执行的Sql语句
+			//创建数据表
+			fx.executeSql("create table if not exists student(id UNIQUE,name TEXT)",[],ok,function (e){
+				error(e);
+			})
+			fx.executeSql("insert into student(id,name) values(?,?)",[1,"张小三"],ok,function (e){error(e)})
+			fx.executeSql("insert into student(id,name) values(?,?)",[3,"王五"],ok,function (e){error(e)})
+			/*fx.executeSql("update student set name=? where id=?",["小李子",2],ok,function(e){error(e);})
+			fx.executeSql("delete from student where id=?",[3],ok,function(e){error(e);})*/
+			fx.executeSql("select * from student where id = ?",[2],ok,function(e){error(e);})
+		})
+		//表创建成功执行的回调函数
+		function ok(){
+			alert("成功");
+			console.log()
+		}
+		//表创建失败执行的回调函数
+		function error(e){
+			alert("失败"+e.message);
+		}
+	</script>
+</body>
+</html>
